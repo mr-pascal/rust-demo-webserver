@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: server1-deployment
+spec:
+  selector:
+    matchLabels:
+      app: server1
+  replicas: 2 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: server1
+    spec:
+      containers:
+      - name: server1
+        image: abszissex/server1:latest
+        ports:
+        - containerPort: 8080

@@ -1,1 +1,2 @@
-docker build -t abszissex/server1 .
+APP=server1
+docker build -t abszissex/$APP -f ../Dockerfile --build-arg APP=$APP .

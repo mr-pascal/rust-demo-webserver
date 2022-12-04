@@ -1,7 +1,11 @@
+#################
+##### Arguments
+ARG APP=server1
+
 ################
 ##### Builder
 FROM rust:1.65.0 as builder
-# FROM rust:1.65.0-slim as builder
+ARG APP
 ENV PKG_CONFIG_ALLOW_CROSS=1
 
 ## Install musl dependencies
@@ -15,44 +19,38 @@ RUN rustup target add x86_64-unknown-linux-musl
 WORKDIR /usr/src
 
 # Create blank project
-RUN USER=root cargo new medium-rust-dockerize
+RUN USER=root cargo new $APP
 
 # We want dependencies cached, so copy those first.
-COPY Cargo.toml Cargo.lock /usr/src/medium-rust-dockerize/
-
+COPY Cargo.toml Cargo.lock /usr/src/$APP/
 
 # Set the working directory
-WORKDIR /usr/src/medium-rust-dockerize
-
-# RUN CARGO_UNSTABLE_SPARSE_REGISTRY=true cargo update
+WORKDIR /usr/src/$APP
 
 # This is a dummy build to get the dependencies cached.
-# RUN RUSTFLAGS=-Clinker=musl-gcc cargo build --target x86_64-unknown-linux-musl --release
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
-
-
 # Now copy in the rest of the sources
-COPY src /usr/src/medium-rust-dockerize/src/
+COPY src /usr/src/$APP/src/
 
 ## Touch main.rs to prevent cached release build
-RUN touch /usr/src/medium-rust-dockerize/src/main.rs
+RUN touch /usr/src/$APP/src/main.rs
 
 # This is the actual application build.
-# RUN RUSTFLAGS=-Clinker=musl-gcc cargo build --target x86_64-unknown-linux-musl --release
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
 ################
 ##### Runtime
 FROM alpine:3.16.0 AS runtime 
+ARG APP
 
 # Copy application binary from builder image
-# COPY --from=builder /usr/src/medium-rust-dockerize/target/release/medium-rust-dockerize /usr/local/bin
-COPY --from=builder /usr/src/medium-rust-dockerize/target/x86_64-unknown-linux-musl/release/server1 /usr/local/bin
+COPY --from=builder /usr/src/$APP/target/x86_64-unknown-linux-musl/release/$APP /usr/local/bin
+RUN mv /usr/local/bin/$APP /usr/local/bin/app
 
 EXPOSE 8080
 
 # Run the application
-CMD ["/usr/local/bin/server1"]
+CMD ["/usr/local/bin/app"]
 
 

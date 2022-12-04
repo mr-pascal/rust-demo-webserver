@@ -9,7 +9,7 @@ async fn greet() -> impl Responder {
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> std::io::Result<()> {
     let port: u16 = option_env!("PORT").unwrap_or("8080").parse().unwrap();
-    let host = option_env!("HOST").unwrap_or("127.0.0.1");
+    let host = option_env!("HOST").unwrap_or("0.0.0.0");
     let startup_msg = format!("Server2: Starting on {host}:{port}");
 
     println!("{}", startup_msg);

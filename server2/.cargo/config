@@ -1,0 +1,8 @@
+[target.x86_64-unknown-linux-musl]
+linker = "x86_64-linux-musl-gcc"
+
+[net]
+git-fetch-with-cli = true
+
+[source.crates-io]
+registry = "git://github.com/rust-lang/crates.io-index.git"

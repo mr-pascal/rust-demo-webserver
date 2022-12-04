@@ -10,7 +10,7 @@ struct GETAPIResponse {
 async fn make_request() -> Result<String, Box<dyn std::error::Error>> {
     let client = reqwest::Client::new();
 
-    let target_host = option_env!("TARGET").unwrap_or("http://127.0.0.1:8081");
+    let target_host = option_env!("TARGET").unwrap_or("http://0.0.0.0:8081");
     let target_url = format!("{}/hello", target_host);
 
     println!("Sending request to '{}'!", target_url);
@@ -48,7 +48,7 @@ async fn greet() -> impl Responder {
 #[actix_web::main] // or #[tokio::main]
 async fn main() -> std::io::Result<()> {
     let port: u16 = option_env!("PORT").unwrap_or("8080").parse().unwrap();
-    let host = option_env!("HOST").unwrap_or("127.0.0.1");
+    let host = option_env!("HOST").unwrap_or("0.0.0.0");
     let startup_msg = format!("Server1: Starting on {host}:{port}");
 
     println!("{}", startup_msg);

@@ -1,6 +1,6 @@
 #################
 ##### Arguments
-ARG APP=server1
+ARG APP
 
 ################
 ##### Builder

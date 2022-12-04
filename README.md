@@ -15,20 +15,9 @@ to have a test service e.g. in a Kubernetes setup where two services should work
 
 ### Commands
 
-cargo config
-[source.crates-io]
-registry = "git://github.com/rust-lang/crates.io-index.git"
-
-
-
 #### Start servers on local machine
 
 ```sh
-
-CC_x86_64_unknown_linux_musl="x86_64-linux-musl-gcc" cargo build --release --target=x86_64-unknown-linux-musl
-
-
-
 cd server1
 # Starts server1 on localhost:8080
 ./start.sh
